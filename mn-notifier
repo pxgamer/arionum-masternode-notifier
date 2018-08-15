@@ -8,7 +8,7 @@ $dbname = "aronode";
 
 # The IP of the masternode you wish to monitor
 
-$mn-ip = "x.x.x.x";
+$mnip = "x.x.x.x";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -19,7 +19,7 @@ if ($conn->connect_error) {
 
 $sql = "SELECT ip, last_won FROM masternode";
 $result = $conn->query($sql);
-$lastrow = "SELECT MAX(ID) FROM masternode"
+$lastrow = "SELECT MAX(ID) FROM masternode";
 
 
 if ($result->num_rows > 0) {
