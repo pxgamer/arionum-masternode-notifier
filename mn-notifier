@@ -26,7 +26,7 @@ if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
 # echo "<br> ip: ". $row["ip"]. " - last won: ". $row["last_won"]. "<br>";
- echo "<br> ip: ". lastrow["ip"]. " - last won: ". $row["last_won"]. "<br>";
+ echo "ip: ". $lastrow["ip"]. " - last won: ". $row["last_won"].;
     }
 } else {
     echo "0 results";
