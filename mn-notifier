@@ -1,10 +1,14 @@
 <?php
-#This is a work in progress, and it probably does not work yet. (i'm learning)
+# This is a work in progress, and it probably does not work yet. (i'm learning)
 
 $servername = "localhost";
 $username = "aronode";
 $password = "2LWFBB8EKcybeOeS";
 $dbname = "aronode";
+
+# The IP of the masternode you wish to monitor
+
+$mn-ip = "x.x.x.x";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -15,11 +19,14 @@ if ($conn->connect_error) {
 
 $sql = "SELECT ip, last_won FROM masternode";
 $result = $conn->query($sql);
+$lastrow = "SELECT MAX(ID) FROM masternode"
+
 
 if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
- echo "<br> ip: ". $row["ip"]. " - last won: ". $row["last_won"]. "<br>";
+# echo "<br> ip: ". $row["ip"]. " - last won: ". $row["last_won"]. "<br>";
+ echo "<br> ip: ". lastrow["ip"]. " - last won: ". $row["last_won"]. "<br>";
     }
 } else {
     echo "0 results";
