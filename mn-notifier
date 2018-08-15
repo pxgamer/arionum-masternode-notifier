@@ -1,0 +1,29 @@
+<?php
+#This is a work in progress, and it probably does not work yet. (i'm learning)
+
+$servername = "localhost";
+$username = "aronode";
+$password = "2LWFBB8EKcybeOeS";
+$dbname = "aronode";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$sql = "SELECT ip, last_won FROM masternode";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+ echo "<br> ip: ". $row["ip"]. " - last won: ". $row["last_won"]. "<br>" . $
+    }
+} else {
+    echo "0 results";
+}
+
+$conn->close();
+?>
