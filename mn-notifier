@@ -22,12 +22,13 @@ $result = $conn->query($sql);
 $lastrow = "SELECT MAX(ID) FROM masternode";
 
 
-if ($result->num_rows > 0) {
+#if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
+#    while($row = $result->fetch_assoc()) {
 # echo "<br> ip: ". $row["ip"]. " - last won: ". $row["last_won"]. "<br>";
+if (%lastrow["ip"] = $mnip)
  echo "ip: ". $lastrow["ip"]. " - last won: ". $row["last_won"].;
-    }
+   }
 } else {
     echo "0 results";
 }
