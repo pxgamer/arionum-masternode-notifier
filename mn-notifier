@@ -26,7 +26,7 @@ $lastrow = "SELECT MAX(ID) FROM masternode";
     // output data of each row
 #    while($row = $result->fetch_assoc()) {
 # echo "<br> ip: ". $row["ip"]. " - last won: ". $row["last_won"]. "<br>";
-if (%lastrow["ip"] = $mnip)
+if ($lastrow["ip"] = $mnip)
  echo "ip: ". $lastrow["ip"]. " - last won: ". $row["last_won"].;
    }
 } else {
