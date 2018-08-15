@@ -19,7 +19,7 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
- echo "<br> ip: ". $row["ip"]. " - last won: ". $row["last_won"]. "<br>" . $
+ echo "<br> ip: ". $row["ip"]. " - last won: ". $row["last_won"]. "<br>";
     }
 } else {
     echo "0 results";
