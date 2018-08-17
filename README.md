@@ -17,6 +17,18 @@ make the file executable
 Enter your information for the variables at the top of mn-notifier
 
     $ sudo nano mn-notifer
+    
+    $servername = "localhost"; 
+    $username = "db_user"; # the username you connect to the database with
+    $password = "password"; # the password you connect to the database with
+    $dbname = "aronode"; # the name of the databe you are connecting to
+    $tomail = "yours@mail.com"; # input your email address
+    $frommail = "masternode@arionum.com"; #change to who you want to see the notification mail from
+
+    # The IP of the masternode you wish to monitor
+    $mnip = "x.x.x.x"; 
+    #Your public key to check/return your wallet balance
+    $pubkey = "Enter Pub Key";
 
 
 change the variables, (these are the same that are found in your nodes config.inc.php)
