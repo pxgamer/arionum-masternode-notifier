@@ -5,9 +5,7 @@ Clone the github repository to a directory;
 eg: 
 
     $ mkdir mn-notifier
-
-    $ cd mn-notifier
-    
+    $ cd mn-notifier    
     $ git clone https://github.com/Monkis74/Aro-MN-Notifier.git
 
 
