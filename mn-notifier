@@ -71,7 +71,7 @@ else{
 # delete hash below to test your email
 #        mail("$tomail", "You Did Not Win Block # $lastBlock ", "$body", "From: $frommail");
 }
-sleep(10); # the amount of time to wait befor polling database again, keep under 30is to catch occasional short block times.
+sleep(20); # the amount of time to wait befor polling database again, keep under 30ish to catch occasional short block times.
 }
 
 $conn->close();
