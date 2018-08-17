@@ -2,7 +2,9 @@
 notifies user when his selected ip matches the last ip in the mn database that he just got a reward.
 
 Clone the github repository to a directory;
-eg: $ mkdir mn-notifier
+eg: 
+
+    $ mkdir mn-notifier
 
     $ cd mn-notifier
     
