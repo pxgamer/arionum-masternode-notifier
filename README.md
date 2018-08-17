@@ -16,7 +16,7 @@ make the file executable
 
 Enter your information for the variables at the top of mn-notifier
 
-$ sudo nano mn-notifer
+    $ sudo nano mn-notifer
 
 
 change the variables,
@@ -26,7 +26,7 @@ ctrl+x then y save changes and exit.
 
 Setup a crontab to run it every minute
 
-$ crtontab -e
+    $ crtontab -e
 
 
 add this at the bottom */1 * * * * php /root/mn-myfiles/mn-notifier >/dev/null 
