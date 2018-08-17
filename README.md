@@ -21,7 +21,7 @@ Enter your information for the variables at the top of mn-notifier
     $ sudo nano mn-notifer
 
 
-change the variables,
+change the variables, (these are the same that are found in your nodes config.inc.php)
 
 ctrl+x then y save changes and exit.
     
