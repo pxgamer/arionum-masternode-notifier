@@ -26,16 +26,15 @@ change the variables, (these are the same that are found in your nodes config.in
 ctrl+x then y save changes and exit.
     
 
-Setup a crontab to run it every minute
+I tried running this wit ha cron, but a minute time span can be too long sometimes, so I included a while loop to keep it running indefinitely, polling data according to sleep(time) at the end ofthe while loop.
 
-    $ crtontab -e
+Run this script using tmux to keep it running after you logout of your vps.
 
-
-add this at the bottom 
-
-    */1 * * * * php /root/mn-myfiles/mn-notifier >/dev/null 
-
-ctrl+x then y to save and exit.
+    $ cd mn-notifier
+    $ tmux new -s sessionname
+    $ php mn-notifier
+    
+You can now logout and the script will keep running to notify you when your masternode wins a block.
      
 
 
