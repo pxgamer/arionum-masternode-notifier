@@ -18,7 +18,8 @@ Enter your information for the variables at the top of mn-notifier
 
 $ sudo nano mn-notifer
 
-change the variables
+
+change the variables,
 
 ctrl+x then y save changes and exit.
     
@@ -26,6 +27,7 @@ ctrl+x then y save changes and exit.
 Setup a crontab to run it every minute
 
 $ crtontab -e
+
 
 add this at the bottom */1 * * * * php /root/mn-myfiles/mn-notifier >/dev/null 
 
