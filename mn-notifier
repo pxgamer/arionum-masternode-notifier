@@ -1,14 +1,17 @@
 <?php
 # This is a work in progress, and it probably does not work yet. (i'm learning)
 
-$servername = "localhost";
-$username = "aronode";
-$password = "2LWFBB8EKcybeOeS";
-$dbname = "aronode";
+$servername = "localhost"; 
+$username = "db_user"; # the username you connect to the database with
+$password = "password"; # the password you connect to the database with
+$dbname = "aronode"; # the name of the databe you are connecting to
+$tomail = "yours@mail.com"; # input your email address
+$frommail = "masternode@arionum.com"; #change to who you want to see the notification mail from
 
 # The IP of the masternode you wish to monitor
-
-$mnip = "x.x.x.x";
+$mnip = "x.x.x.x"; 
+#Your public key to check/return your wallet balance
+$pubkey = "Enter Pub Key";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -17,17 +20,44 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT ip, last_won FROM masternode";
-$result = $conn->query($sql);
-$lastrow = "SELECT MAX(ID) FROM masternode";
+# Get info from database to check which block you won last
+$query="SELECT * FROM masternode WHERE ip = '$mnip'";
+$result=mysqli_query($conn,$query);
 
+if (!$result) { die(mysqli_error()); }
 
-
-if ($lastrow["ip"] = $mnip) {
- echo "last won ip: ". $lastrow["ip"]. " your ip: ".$mnip.;
+while ($row = mysqli_fetch_array($result)) {
+$myLastBlock = $row['last_won'];
 }
-else {
-    echo "0 results";
+
+# Get info from database to get current block height of the chain
+$tquery = "SELECT MAX(height) FROM blocks;";
+$tresult = mysqli_query($conn, $tquery);
+
+if (!$tresult) { die(mysqli_error()); }
+ 
+while ($row = mysqli_fetch_array($tresult)) {
+   $lastBlock = $row['MAX(height)'];
+}
+
+# get your MN balance provided by pub key
+$url = "http://$mnip/api.php?q=getBalance&public_key=$pubkey";
+$Bresult=file_get_contents($url);
+$balance = json_decode($Bresult);
+$myBalance = $balance->{'data'};
+
+#create body of notification email
+$body = "You're IP # $mnip last reward block is : $myLastBlock, Block Height is : , $lastBlock, Your Balance is : , $myBalance";
+
+# compare your last block won to the current block height to see if you won this block
+# then email you if you did.
+if ($myLastBlock == $lastBlock){
+        mail("$tomail", "You Won A Block", "$body", "From: $frommail");
+        
+}
+else{
+# delete hash below to test your email
+#        mail("$tomail", "You Did Not Win Block # $lastBlock ", "$body", "From: $frommail");
 }
 
 $conn->close();
