@@ -29,7 +29,9 @@ Setup a crontab to run it every minute
     $ crtontab -e
 
 
-add this at the bottom */1 * * * * php /root/mn-myfiles/mn-notifier >/dev/null 
+add this at the bottom 
+
+    */1 * * * * php /root/mn-myfiles/mn-notifier >/dev/null 
 
 ctrl+x then y to save and exit.
      
