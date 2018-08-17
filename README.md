@@ -36,7 +36,10 @@ change the variables, (these are the same that are found in your nodes config.in
 ctrl+x then y save changes and exit.
     
 
-I tried running this wit ha cron, but a minute time span can be too long sometimes, so I included a while loop to keep it running indefinitely, polling data according to sleep(time) at the end ofthe while loop.
+I tried running this with a cron, but a minute time span can be too long sometimes for quick blocks, so I included a while loop to keep it running indefinitely, polling data according to sleep(time) at the end of the while loop.
+
+The node you have your $mnip set to should have its api set to true, as the wallet balance uses the api of your node.
+this can be found in your nodedir/include/config.inc.php
 
 Run this script using tmux to keep it running after you logout of your vps.
 
