@@ -61,7 +61,7 @@ $body = "You're IP # $mnip last reward block is : $myLastBlock, Block Height is 
 # then email you if you did.
 $tmpfile = 'tmp';
 $lastNotified = file_get_contents($tmpfile);
-if ($myLastBlock == $lastBlock AND $lastBlock !== lastNotified ){
+if ($myLastBlock == $lastBlock AND $lastBlock !== $lastNotified ){
         mail("$tomail", "You Won A Block", "$body", "From: $frommail");
         $wait=exec('rm -r -f tmp');
         file_put_contents('tmp', $lastBlock);
