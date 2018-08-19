@@ -1,6 +1,6 @@
 <?php
 # This is a work in progress, and it probably does not work yet. (i'm learning)
-# added a config file to keep user specific data during future updates.
+# added a configuration file to keep user specific data during future updates.
 #Complete the information on the variables below in the config.php file.
 
 require_once ("config.php");
