@@ -1,19 +1,19 @@
 <?php
 # This is a work in progress, and it probably does not work yet. (i'm learning)
 
-#Complete the information on the variables below
+#Complete the information on the variables below in the config.php file.
 
-$servername = "localhost"; 
-$username = "db_user"; # the username you connect to the database with
-$password = "password"; # the password you connect to the database with
-$dbname = "aronode"; # the name of the databe you are connecting to
-$tomail = "yours@mail.com"; # input your email address
-$frommail = "masternode@arionum.com"; #change to who you want to see the notification mail from
+require_once ("config.php");
 
-# The IP of the masternode you wish to monitor
-$mnip = "x.x.x.x"; 
-#Your public key to check/return your wallet balance
-$pubkey = "Enter Pub Key";
+$servername = $_config['servername'];
+$username = $_config['username'];
+$password = $_config['password'];
+$dbname = $_config['dbname'];
+$tomail = $_config['tomail'];
+$frommail = $_config['frommail'];
+$mnip = $_config['ip'];
+$pubkey = $_config['pub_key'];
+
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -22,6 +22,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+$startnotify = false; # false will send an email on startup to notify you the service is running.
 $loop = true; # this will run the loop indefinitely to check you numbers
 while ($loop) {
 
@@ -71,6 +72,13 @@ else{
 # delete hash below to test your email
 #        mail("$tomail", "You Did Not Win Block # $lastBlock ", "$body", "From: $frommail");
 }
+
+if(!$startnotify){
+        mail("$tomail", "Masternode Reward Notification Service is started. ", "$body", "From: $frommail");
+        $startnotify = true;
+        echo "Startup notification email sent";
+}
+
 sleep(20); # the amount of time to wait befor polling database again, keep under 30ish to catch occasional short block times.
 }
 
