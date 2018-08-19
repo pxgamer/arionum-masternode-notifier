@@ -1,7 +1,7 @@
 <?php
-# This is a work in progress, and it probably does not work yet. (i'm learning)
-# added a configuration file to keep user specific data during future updates.
-#Complete the information on the variables below in the config.php file.
+# This is a work in progress, and it probably does not work yet. (I'm learning)
+# I added a configuration file to keep user specific data during future updates.
+# Complete the information on the variables below in the config.php file.
 
 require_once ("config.php");
 
