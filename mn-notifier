@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 # This is a work in progress, it works on my configuration of ubuntu 16.04. (I'm learning)
 # I added a configuration file to keep user specific data during future updates. Trying to get this functional.
