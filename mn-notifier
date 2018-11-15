@@ -68,13 +68,13 @@ while (true) {
     $lastNotified = file_get_contents($tempFile);
 
     if ($myLastBlock === $lastBlock && $lastBlock !== $lastNotified) {
-        mail($config['mail_to'], 'You Won A Block', $body, 'From: '.$config['mail_from']);
+        mail($config['mail_to'], 'You Won A Block', $body, ['From' => $config['mail_from']]);
 
         unlink($tempFile);
         file_put_contents($tempFile, $lastBlock);
     } else {
         // Delete hash below to test your email
-        // mail($config['mail_to'], 'You Did Not Win Block # '.$lastBlock, $body, 'From: '.$config['mail_from']);
+        // mail($config['mail_to'], 'You Did Not Win Block # '.$lastBlock, $body, ['From' => $config['mail_from']]);
     }
 
     if ($notifyOnStart) {
@@ -82,7 +82,7 @@ while (true) {
             $config['mail_to'],
             'Masternode Reward Notification Service is started. '.$lastBlock,
             $body,
-            'From: '.$config['mail_from']
+            ['From' => $config['mail_from']]
         );
         $notifyOnStart = false;
 
