@@ -2,7 +2,7 @@
 <?php
 
 if (!file_exists(__DIR__.'/config.php')) {
-    die('No configuration file exists.');
+    die('ERROR: No configuration file exists.'.PHP_EOL);
 }
 
 $config = require __DIR__.'/config.php';
@@ -17,7 +17,7 @@ $database = new mysqli(
 
 // Check connection
 if ($database->connect_error) {
-    die('Connection failed: '.$database->connect_error);
+    die('Connection failed: '.$database->connect_error.PHP_EOL);
 }
 
 // If this is enabled, it will send an email on startup to notify you that the service is running.
@@ -28,7 +28,7 @@ while (true) {
     $query = 'SELECT * FROM masternode WHERE ip = \''.$config['ip_address'].'\'';
 
     if (!$result = $database->query($query)) {
-        die($database->error);
+        die($database->error.PHP_EOL);
     }
 
     $myLastBlock = null;
@@ -40,7 +40,7 @@ while (true) {
     $currentBlock = $database->query('SELECT MAX(height) as max_height FROM blocks');
 
     if (!$currentBlock) {
-        die($database->error);
+        die($database->error.PHP_EOL);
     }
 
     $lastBlock = 'Unknown';
@@ -53,7 +53,7 @@ while (true) {
     $balanceResult = file_get_contents($url);
 
     if (!$balanceResult) {
-        die($database->error);
+        die($database->error.PHP_EOL);
     }
 
     $balance = json_decode($balanceResult);
@@ -69,6 +69,7 @@ while (true) {
 
     if ($myLastBlock === $lastBlock && $lastBlock !== $lastNotified) {
         mail($config['mail_to'], 'You Won A Block', $body, 'From: '.$config['mail_from']);
+
         unlink($tempFile);
         file_put_contents($tempFile, $lastBlock);
     } else {
@@ -85,7 +86,7 @@ while (true) {
         );
         $notifyOnStart = false;
 
-        echo 'Startup notification email sent.';
+        echo 'Startup notification email sent.'.PHP_EOL;
     }
 
     // The amount of time to wait before polling database again, keep under 30ish to catch occasional short block times.
