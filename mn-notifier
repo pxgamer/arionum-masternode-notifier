@@ -1,91 +1,95 @@
 #!/usr/bin/env php
 <?php
-// This is a work in progress, it works on my configuration of ubuntu 16.04. (I'm learning)
-// I added a configuration file to keep user specific data during future updates. Trying to get this functional.
-// Complete the information on the variables below in the config.php file.
 
-require_once 'config.php';
-
-$servername = $_config['servername'];
-$username = $_config['username'];
-$password = $_config['password'];
-$dbname = $_config['dbname'];
-$tomail = $_config['tomail'];
-$frommail = $_config['frommail'];
-$mnip = $_config['ip'];
-$pubkey = $_config['pub_key'];
-
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    die('Connection failed: '.$conn->connect_error);
+if (!file_exists(__DIR__.'/config.php')) {
+    die('No configuration file exists.');
 }
 
-$startnotify = false; // false will send an email on startup to notify you the service is running.
-$loop = true; // this will run the loop indefinitely to check you numbers
-while ($loop) {
-    // Get info from database to check which block you won last
-    $query = "SELECT * FROM masternode WHERE ip = '$mnip'";
-    $result = mysqli_query($conn, $query);
+$config = require __DIR__.'/config.php';
 
-    if (!$result) {
-        die(mysqli_error());
+// Create connection
+$database = new mysqli(
+    $config['db_host'],
+    $config['db_user'],
+    $config['db_pass'],
+    $config['db_name']
+);
+
+// Check connection
+if ($database->connect_error) {
+    die('Connection failed: '.$database->connect_error);
+}
+
+// If this is enabled, it will send an email on startup to notify you that the service is running.
+$notifyOnStart = true;
+
+while (true) {
+    // Get info from database to check which block you won last
+    $query = 'SELECT * FROM masternode WHERE ip = \''.$config['ip_address'].'\'';
+
+    if (!$result = $database->query($query)) {
+        die($database->error);
     }
 
     $myLastBlock = null;
-    while ($row = mysqli_fetch_array($result)) {
+    while ($row = $result->fetch_array()) {
         $myLastBlock = $row['last_won'];
     }
 
     // Get info from database to get current block height of the chain
-    $tquery = 'SELECT MAX(height) FROM blocks;';
-    $tresult = mysqli_query($conn, $tquery);
+    $currentBlock = $database->query('SELECT MAX(height) as max_height FROM blocks');
 
-    if (!$tresult) {
-        die(mysqli_error());
+    if (!$currentBlock) {
+        die($database->error);
     }
 
-    while ($row = mysqli_fetch_array($tresult)) {
-        $lastBlock = $row['MAX(height)'];
+    $lastBlock = 'Unknown';
+    while ($row = $currentBlock->fetch_array()) {
+        $lastBlock = $row['max_height'];
     }
 
-    // get your MN balance provided by pub key
-    $url = "http://$mnip/api.php?q=getBalance&public_key=$pubkey";
-    $Bresult = file_get_contents($url);
+    // Get your masternode balance provided by the public key
+    $url = 'http://'.$config['ip_address'].'/api.php?q=getBalance&public_key='.$config['public_key'];
+    $balanceResult = file_get_contents($url);
 
-    if (!$Bresult) {
-        die(mysqli_error());
+    if (!$balanceResult) {
+        die($database->error);
     }
 
-    $balance = json_decode($Bresult);
-    $myBalance = $balance->{'data'};
+    $balance = json_decode($balanceResult);
+    $myBalance = $balance->data;
 
-    // create body of notification email
-    $body = "You're IP # $mnip last reward block is : $myLastBlock, Block Height is : , $lastBlock, Your Balance is : , $myBalance";
+    // Create the body for the notification email
+    $body = 'Your IP # '.$config['ip_address'].' last reward block is : '.$myLastBlock.
+        ', Block Height is : '.$lastBlock.', Your Balance is : '.$myBalance;
 
-    // compare your last block won to the current block height to see if you won this block
-    // then email you if you did.
-    $tmpfile = 'tmp';
-    $lastNotified = file_get_contents($tmpfile);
+    // Compare your last block won to the current block height to see if you won this block, then email you if you did.
+    $tempFile = __DIR__.'/tmp';
+    $lastNotified = file_get_contents($tempFile);
+
     if ($myLastBlock === $lastBlock && $lastBlock !== $lastNotified) {
-        mail($tomail, 'You Won A Block', $body, "From: $frommail");
-        $wait = exec('rm -r -f tmp');
-        file_put_contents($tmpfile, $lastBlock);
+        mail($config['mail_to'], 'You Won A Block', $body, 'From: '.$config['mail_from']);
+        unlink($tempFile);
+        file_put_contents($tempFile, $lastBlock);
     } else {
-        // delete hash below to test your email
-        // mail("$tomail", "You Did Not Win Block # $lastBlock ", "$body", "From: $frommail");
+        // Delete hash below to test your email
+        // mail($config['mail_to'], 'You Did Not Win Block # '.$lastBlock, $body, 'From: '.$config['mail_from']);
     }
 
-    if (!$startnotify) {
-        mail($tomail, 'Masternode Reward Notification Service is started. ', $body, "From: $frommail");
-        $startnotify = true;
+    if ($notifyOnStart) {
+        mail(
+            $config['mail_to'],
+            'Masternode Reward Notification Service is started. '.$lastBlock,
+            $body,
+            'From: '.$config['mail_from']
+        );
+        $notifyOnStart = false;
 
         echo 'Startup notification email sent.';
     }
 
-    sleep(20); // the amount of time to wait befor polling database again, keep under 30ish to catch occasional short block times.
+    // The amount of time to wait before polling database again, keep under 30ish to catch occasional short block times.
+    sleep(20);
 }
 
-$conn->close();
+$database->close();
