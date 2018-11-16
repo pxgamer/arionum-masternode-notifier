@@ -2,7 +2,7 @@
 <?php
 
 if (!file_exists(__DIR__.'/config.php')) {
-    die('ERROR: No configuration file exists.'.PHP_EOL);
+    die('ERROR: No configuration file exists.'.PHP_EOL.'Please copy \'config-sample.php\' to \'config.php\'');
 }
 
 $config = require __DIR__.'/config.php';
