@@ -8,12 +8,7 @@ if (!file_exists(__DIR__.'/config.php')) {
 $config = require __DIR__.'/config.php';
 
 // Create connection
-$database = new mysqli(
-    $config['db_host'],
-    $config['db_user'],
-    $config['db_pass'],
-    $config['db_name']
-);
+$database = new mysqli($config['db_host'], $config['db_user'], $config['db_pass'], $config['db_name']);
 
 // Check connection
 if ($database->connect_error) {
