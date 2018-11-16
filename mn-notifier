@@ -7,17 +7,7 @@ if (!file_exists(__DIR__.'/config.php')) {
 
 $config = require __DIR__.'/config.php';
 
-if (empty($config['db_host']) ||
-    empty($config['db_name']) ||
-    empty($config['db_user']) ||
-    empty($config['db_pass']) ||
-    empty($config['ip']) ||
-    empty($config['public_key']) ||
-    empty($config['mail_to']) ||
-    empty($config['mail_from'])
-) {
-    die('WARNING: Please set the required configuration variables.');
-}
+checkRequiredConfiguration($config);
 
 // Create connection
 $database = new mysqli($config['db_host'], $config['db_user'], $config['db_pass'], $config['db_name']);
@@ -101,3 +91,21 @@ while (true) {
 }
 
 $database->close();
+
+/**
+ * @param array $config
+ */
+function checkRequiredConfiguration(array $config): void
+{
+    if (empty($config['db_host']) ||
+        empty($config['db_name']) ||
+        empty($config['db_user']) ||
+        empty($config['db_pass']) ||
+        empty($config['ip']) ||
+        empty($config['public_key']) ||
+        empty($config['mail_to']) ||
+        empty($config['mail_from'])
+    ) {
+        die('WARNING: Please set the required configuration variables.');
+    }
+}
